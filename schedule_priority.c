@@ -32,22 +32,20 @@ void add(char *name, int priority, int burst) //adds a new task to the list
 Task *pickNextTask()
 {
     Task *curr_task = head->task;
-    Task *shortest = curr_task;
+    Task *priority_task = curr_task;
     struct node *next_task = head->next;
 
     while (next_task != NULL)
     {
-        //if the next task has s shorter burst time then the current task, re assign
-        if (next_task->task->burst < shortest->burst)
+        if (next_task->task->priority <= priority_task->priority)
         {
-            shortest = next_task->task;
+            priority_task = next_task->task;
         }
-
         curr_task = next_task->task; //assigns the current task to be the next nodes task
         next_task = next_task->next; //makes the next task the pointer to the next node in the struct
     }
 
-    return shortest;
+    return priority_task;
 }
 
 void schedule()
