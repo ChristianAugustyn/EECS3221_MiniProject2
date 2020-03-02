@@ -31,10 +31,35 @@ void add(char *name, int priority, int burst) //adds a new task to the list
 
 Task *pickNextTask()
 {
+    Task *curr_task = head->task;
+    Task *shortest = curr_task;
+    struct node *next_task = head->next;
+
+
+    while(next_task != NULL)
+    {
+        if (next_task->task->burst < shortest->burst) 
+        {   
+            shortest = next_task->task;
+        }
+        
+        curr_task = next_task->task; //assigns the current task to be the next nodes task
+        next_task = next_task->next; //makes the next task the pointer to the next node in the struct
     
+    }
+
+    return shortest;
 }
 
 void schedule()
 {
+    Task *current_task;
+
+    while(head != NULL)
+    {
+        current_task = pickNextTask();
+        run(current_task, current_task->burst);
+        delete(&head, current_task);
+    }
 
 }
