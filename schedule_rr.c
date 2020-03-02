@@ -18,23 +18,48 @@ void add(char *name, int priority, int burst) //adds a new task to the list
     task->priority = priority;
     task->burst = burst;
 
-    if (head == NULL)//if the list has not been created
+    if (head == NULL) //if the list has not been created
     {
-        head = malloc(sizeof(struct node));//allocate size for the head node
-        head->task = task; //assign task to the task attribute in head
+        head = malloc(sizeof(struct node)); //allocate size for the head node
+        head->task = task;                  //assign task to the task attribute in head
     }
-    else 
+    else
     {
-        insert(&head, task);//insert the new node as the head and give a link to the previous head
+        insert(&head, task); //insert the new node as the head and give a link to the previous head
     }
 }
 
 Task *pickNextTask()
 {
+    Task *curr_task = head->task;
+    struct node *next_task = head->next;
 
+    while (next_task != NULL)
+    {
+        curr_task = next_task->task;
+        next_task = next_task->next;
+    }
+    return curr_task;
 }
 
 void schedule()
 {
+    Task *current_task;
 
+    while (head != NULL)
+    {
+        current_task = pickNextTask();
+        run(current_task, current_task->burst);
+        current_task->burst -= QUANTUM;
+        if (current_task->burst <= 0)
+        {
+            delete (&head, current_task);
+        }
+        else
+        {
+            delete (&head, current_task);
+            insert(&head, current_task);
+        }
+        
+    }
 }
