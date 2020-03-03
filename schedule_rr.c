@@ -1,3 +1,8 @@
+/*
+Author: Christian Augustyn
+Date: March 2, 2020
+File: schedule_rr.c
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -83,7 +88,7 @@ void schedule()
             }
             else
             {
-                waittime += completion_time - current_task->burst;
+                waittime += completion_time - current_task->burst; //remiaing
             }
             delete (&head, current_task);
         }

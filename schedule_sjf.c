@@ -1,3 +1,8 @@
+/*
+Author: Christian Augustyn
+Date: March 2, 2020
+File: schedule_sjf.c
+*/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
