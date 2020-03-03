@@ -12,6 +12,7 @@ struct node *node = NULL;
 float avg_turnaround;
 float avg_wait;
 float avg_response;
+float total_completion_time;
 
 int processes;
 int time;
@@ -68,12 +69,13 @@ void schedule()
         run(current_task, current_task->burst);
 
         completion_time += current_task->burst;
-        waittime = completion_time - current_task->burst;
+        total_completion_time += completion_time;
+        waittime += completion_time - current_task->burst;
 
         delete (&head, current_task);
     }
 
-    avg_turnaround = completion_time / processes;
+    avg_turnaround = total_completion_time / processes;
     avg_wait = waittime / processes;
     avg_response = avg_wait;
     printf("Average Turnaround Time: %.2f\nAverage Waiting Time: %.2f\nAverage Response Time: %.2f\n", avg_turnaround, avg_wait, avg_response);

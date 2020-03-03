@@ -9,9 +9,20 @@
 struct node *head = NULL;
 struct node *node = NULL;
 // struct node *tail = NULL;
+float avg_turnaround;
+float avg_wait;
+float avg_response;
+float total_completion_time;
+
+int processes;
+int time;
+float completion_time;
+int waittime;
 
 void add(char *name, int priority, int burst) //adds a new task to the list
 {
+    processes++;
+
     Task *task = malloc(sizeof(struct node)); //creates a new task struct
     //assigns all the attributes
     task->name = name;
@@ -49,10 +60,31 @@ void schedule()
     while (head != NULL)
     {
         current_task = pickNextTask();
-        run(current_task, current_task->burst);
+
+        if (current_task->burst >= QUANTUM)
+        {
+            run(current_task, QUANTUM);
+            time += QUANTUM;
+        }
+        else
+        {
+            run(current_task, current_task->burst);
+            time += current_task->burst;
+        }
+
         current_task->burst -= QUANTUM;
         if (current_task->burst <= 0)
         {
+            completion_time += time;
+            total_completion_time += completion_time;
+            if (current_task->burst >= QUANTUM)
+            {
+                waittime += completion_time - QUANTUM;
+            }
+            else
+            {
+                waittime += completion_time - current_task->burst;
+            }
             delete (&head, current_task);
         }
         else
@@ -60,6 +92,12 @@ void schedule()
             delete (&head, current_task);
             insert(&head, current_task);
         }
-        
+
     }
+
+    avg_turnaround = total_completion_time / processes;
+    avg_wait = waittime / processes;
+    avg_response = (QUANTUM * processes) / processes;
+
+    printf("Average Turnaround Time: %.2f\nAverage Waiting Time: %.2f\nAverage Response Time: %.2f\n", avg_turnaround, avg_wait, avg_response);
 }

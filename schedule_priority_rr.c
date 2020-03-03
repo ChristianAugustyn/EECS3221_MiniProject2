@@ -31,7 +31,7 @@ void add(char *name, int priority, int burst) //adds a new task to the list
 
 Task *pickNextTask()
 {
-
+    
 }
 
 void schedule()
